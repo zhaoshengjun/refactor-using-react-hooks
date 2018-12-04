@@ -1,6 +1,5 @@
 import { useContext, useReducer, useEffect } from "react";
 import PropTypes from "prop-types";
-import isEqual from "lodash/isEqual";
 import * as GitHub from "../../../github-client";
 
 function Query({ query, variables, children, normalize = data => data }) {
