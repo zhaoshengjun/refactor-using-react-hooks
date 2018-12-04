@@ -10,27 +10,30 @@ function Query({ query, variables, children, normalize = data => data }) {
     { loaded: false, fetching: false, data: null, error: null }
   );
 
-  useEffect(() => {
-    setState({ fetching: true });
-    client
-      .request(query, variables)
-      .then(res =>
-        setState({
-          data: normalize(res),
-          error: null,
-          loaded: true,
-          fetching: false
-        })
-      )
-      .catch(error =>
-        setState({
-          error,
-          data: null,
-          loaded: false,
-          fetching: false
-        })
-      );
-  });
+  useEffect(
+    () => {
+      setState({ fetching: true });
+      client
+        .request(query, variables)
+        .then(res =>
+          setState({
+            data: normalize(res),
+            error: null,
+            loaded: true,
+            fetching: false
+          })
+        )
+        .catch(error =>
+          setState({
+            error,
+            data: null,
+            loaded: false,
+            fetching: false
+          })
+        );
+    },
+    [query, variables]
+  );
 }
 
 Query.porpTypes = {
