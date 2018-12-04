@@ -1,4 +1,4 @@
-import { Component, useContext, useReducer } from "react";
+import { Component, useContext, useReducer, useEffect } from "react";
 import PropTypes from "prop-types";
 import isEqual from "lodash/isEqual";
 import * as GitHub from "../../../github-client";
@@ -9,6 +9,28 @@ function Query({ query, variables, children, normalize = data => data }) {
     (state, newState) => ({ ...state, ...newState }),
     { loaded: false, fetching: false, data: null, error: null }
   );
+
+  useEffect(() => {
+    setState({ fetching: true });
+    client
+      .request(this.props.query, this.props.variables)
+      .then(res =>
+        setState({
+          data: this.props.normalize(res),
+          error: null,
+          loaded: true,
+          fetching: false
+        })
+      )
+      .catch(error =>
+        setState({
+          error,
+          data: null,
+          loaded: false,
+          fetching: false
+        })
+      );
+  });
 }
 
 Query.porpTypes = {
@@ -35,29 +57,6 @@ class Query extends Component {
 
   componentWillUnmount() {
     this._isMounted = false;
-  }
-
-  query() {
-    this.setState({ fetching: true });
-    const client = this.context;
-    client
-      .request(this.props.query, this.props.variables)
-      .then(res =>
-        this.safeSetState({
-          data: this.props.normalize(res),
-          error: null,
-          loaded: true,
-          fetching: false
-        })
-      )
-      .catch(error =>
-        this.safeSetState({
-          error,
-          data: null,
-          loaded: false,
-          fetching: false
-        })
-      );
   }
 
   safeSetState(...args) {
