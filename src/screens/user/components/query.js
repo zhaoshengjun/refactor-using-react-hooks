@@ -1,9 +1,11 @@
-import { Component } from "react";
+import { Component, useContext } from "react";
 import PropTypes from "prop-types";
 import isEqual from "lodash/isEqual";
 import * as GitHub from "../../../github-client";
 
-function Query({ query, variables, children, normalize = data => data }) {}
+function Query({ query, variables, children, normalize = data => data }) {
+  const client = useContext(GitHub.Context);
+}
 
 Query.porpTypes = {
   query: PropTypes.string.isRequired,
@@ -13,8 +15,6 @@ Query.porpTypes = {
 };
 
 class Query extends Component {
-  static contextType = GitHub.Context;
-
   state = { loaded: false, fetching: false, data: null, error: null };
 
   componentDidMount() {
