@@ -1,10 +1,14 @@
-import { Component, useContext } from "react";
+import { Component, useContext, useReducer } from "react";
 import PropTypes from "prop-types";
 import isEqual from "lodash/isEqual";
 import * as GitHub from "../../../github-client";
 
 function Query({ query, variables, children, normalize = data => data }) {
   const client = useContext(GitHub.Context);
+  const { state, setState } = useReducer(
+    (state, newState) => ({ ...state, ...newState }),
+    { loaded: false, fetching: false, data: null, error: null }
+  );
 }
 
 Query.porpTypes = {
@@ -15,8 +19,6 @@ Query.porpTypes = {
 };
 
 class Query extends Component {
-  state = { loaded: false, fetching: false, data: null, error: null };
-
   componentDidMount() {
     this._isMounted = true;
     this.query();
