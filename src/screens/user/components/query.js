@@ -13,10 +13,10 @@ function Query({ query, variables, children, normalize = data => data }) {
   useEffect(() => {
     setState({ fetching: true });
     client
-      .request(this.props.query, this.props.variables)
+      .request(query, variables)
       .then(res =>
         setState({
-          data: this.props.normalize(res),
+          data: normalize(res),
           error: null,
           loaded: true,
           fetching: false
