@@ -34,6 +34,8 @@ function Query({ query, variables, children, normalize = data => data }) {
     },
     [query, variables]
   );
+
+  return children(state);
 }
 
 Query.porpTypes = {
@@ -42,31 +44,3 @@ Query.porpTypes = {
   children: PropTypes.func.isRequired,
   normalize: PropTypes.func
 };
-
-class Query extends Component {
-  componentDidMount() {
-    this._isMounted = true;
-    this.query();
-  }
-
-  componentDidUpdate(prevProps) {
-    if (
-      !isEqual(thiss.props.query, prevProps.query) ||
-      !isEqual(this.props.variables, prevProps.variables)
-    ) {
-      this.query();
-    }
-  }
-
-  componentWillUnmount() {
-    this._isMounted = false;
-  }
-
-  safeSetState(...args) {
-    this._isMounted && this.setState(...args);
-  }
-
-  render() {
-    return this.props.children(this.state);
-  }
-}
